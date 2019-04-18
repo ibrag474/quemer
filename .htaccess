@@ -1,5 +1,9 @@
-RewriteEngine on
-RewriteBase /api/v1/
-RewriteCond %{REQUEST_FILENAME} !-f
+RewriteEngine On
+
+Options -Indexes
+
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule .* index.php/$0 [PT]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+
+RewriteRule /(.+)$ index.php?url=$1 [QSA,L]

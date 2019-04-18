@@ -1,0 +1,130 @@
+@font-face {
+    font-family: Roboto;
+    src: url('/app/views/design/fonts/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: Titillium;
+    src: url('/app/views/design/fonts/TitilliumWeb-Regular.ttf');
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	background: #fff;
+	overflow: auto;
+	font-family: 'Titillium', sans-serif;
+}
+
+a {
+	color: #1c615c;
+}
+
+a:hover {
+	color: #32d8ca;
+	text-decoration: none;
+}
+
+@media screen and (max-width: 1199px) {
+	.quemerh {
+		display: none;
+	}
+}
+
+@media screen and (min-width: 1199px) {
+	.quemerh-mob {
+		display: none;
+	}
+}
+
+.navbar {
+	background: #32d8ca;
+}
+
+.eyeCatch {
+	margin-top: 3vw;
+	float: right;
+	text-align: center;
+	width: 40%;
+	color: #1c615c;
+	line-height: 1.5;
+	margin-right: 80px;
+}
+
+.mobEyeCatch {
+	margin-top: 7vw;
+	float: left;
+	text-align: left;
+	width: 100%;
+	color: #1c615c;
+	line-height: 1.5;
+}
+
+.quemerh {
+	background-image: url('/app/views/design/images/home/quemerSc.png');
+	background-position: left;
+  	background-repeat: no-repeat;
+  	background-size: 55% 34.5vw;
+	width: 100%;
+	height: 40vw;
+	margin: 20px 0px 20px 0px;
+}
+
+.quemerh-mob {
+	width: 100%;
+	height: 400px;
+	margin: 20px 0px 20px 0px;
+	font-size: 20px;
+	color: #fff;
+	font-weight: bold;
+}
+
+.heading {
+	text-align: center;
+	font-weight: bold;
+	color: #1c615c;
+}
+
+.big {
+	font-size: 3.5vw;
+}
+
+.features {
+	margin: 40px 0px 40px 0px;
+}
+
+.trybox {
+	background: #32d8ca;
+	color: #1c615c;
+	width: 100%;
+	height: 500px;
+	margin-top: 100px;
+	padding-top: 140px;
+}
+
+.trybut {
+	background: #32d8ca;
+	padding: 20px;
+	color: #333;
+	border-radius: 2px;
+	font-size: 16px;
+	text-shadow: 0px 0px;
+}
+
+.getStartedBut {
+	background: #fff;
+	padding: 20px;
+	border-radius: 2px;
+	font-size: 20px;
+	text-shadow: 0px 0px;
+	border-radius: 25px;
+	text-decoration: none;
+}
+
+.footer {
+	margin-top: 50px;
+	padding: 20px;
+	color: #1c615c;
+}

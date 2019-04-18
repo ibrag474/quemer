@@ -1,0 +1,13 @@
+<p id="sp-window-title"></p>
+<button onclick="closeWindow()">X</button>
+<form name="taskForm">
+	<input id ="sp-window-titleInput" type="text" name="title" placeholder="Title">
+	<div id="taskarea" class="sp-window-notetext">
+			
+	</div>
+	<select name="shareTo">
+		<option value="0" selected>Do not share</option>
+	</select>
+	<input id="submit" type="submit" value="Save">
+	<input type="button" onClick="addInputArea(true, 'task', {'task':''}, '')" value="Add one more">
+</form>
