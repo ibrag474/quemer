@@ -20,6 +20,7 @@ class LoginForm extends React.Component {
 		this.state = {email: '', password: ''};
 		this.handleEmailChange = this.handleEmailChange.bind(this);
 		this.handlePswdChange = this.handlePswdChange.bind(this);
+		this.handleForgotPswd = this.handleForgotPswd.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	
@@ -29,6 +30,10 @@ class LoginForm extends React.Component {
 	
 	handlePswdChange(e) {
 		this.setState({password: e.currentTarget.value});
+	}
+	
+	handleForgotPswd(e) {
+		
 	}
 	
 	handleSubmit(e) {

@@ -96,35 +96,25 @@ function forgotPswd() {
 	}
 }
 
-function submitPswdReset() {
-	var code = document.forms["pswdResetForm"]["code"].value;
-	var pswd = document.forms["pswdResetForm"]["password"].value;
-	var repswd = document.forms["pswdResetForm"]["re-password"].value;
-	if (code.length == 64) {
-		if (pswd !== repswd) {
-			document.getElementById("errmsg").innerHTML = "Passwords does not match!";
-			document.getElementById("pswd").value = "";
-			document.getElementById("repswd").value = "";
-		} else {
-			//viskas gerai, dirbam
-			var data = { "act":"pswdreset", "code":code, "password":pswd };
-			var jsondata = JSON.stringify(data);
+function submitPswdReset(context, code, pswd, repswd, callback) {
+	var code = code
+	var pswd = pswd
+	var repswd = repswd
+	var data = { "code":code, "password":pswd };
+	var jsondata = JSON.stringify(data);
 		
-			xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					var response = this.responseText;
-					//var myObj = JSON.parse(response);
-					document.getElementById("res").innerHTML = 'Password was changed succesfully. Now you can <a href="/account/login">log in</a>';
-					document.getElementById("submit").disabled = true;
-					document.getElementById("submit").style = "background:#a0a0a0; color: #666666; transition: 0.5s";
-				}
-			}
-			xmlhttp.open("POST", "restore/?param=" + jsondata, true);
-			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xmlhttp.send();
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			const response = this.responseText;
+			const myObj = JSON.parse(response);
+			callback(context, this.status, myObj);		
 		}
-	} else document.getElementById("errmsg").innerHTML = "Check the code, its too long/short!";
+	}
+	xmlhttp.open("PUT", "api/v1/auth/restore/?json=" + jsondata, true);
+	xmlhttp.setRequestHeader("Content-type", "application/json");
+	xmlhttp.send();
+
 }
 
 
