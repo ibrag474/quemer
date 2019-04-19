@@ -26,11 +26,11 @@ function checkPswd(pswd, repswd) {
 
 function submit(e) {
 	const data = {
-		email: e.target.email.value,
-		name: e.target.name.value,
-		surname: e.target.surname.value,
-		password: e.target.password.value,
-		rePassword: e.target.rePassword.value
+		email: e.currentTarget.email.value,
+		name: e.currentTarget.name.value,
+		surname: e.currentTarget.surname.value,
+		password: e.currentTarget.password.value,
+		rePassword: e.currentTarget.rePassword.value
 	};
 	
 	if (data.rePassword === data.password && data.password.length >= 8) {
@@ -49,11 +49,11 @@ class PasswordInput extends React.Component {
 	}
 	
 	handlePswdChange(event) {
-		this.props.onPasswordChange(event.target.value);
+		this.props.onPasswordChange(event.currentTarget.value);
 	}
 	
 	handleRePswdChange(event) {
-		this.props.onRePasswordChange(event.target.value);
+		this.props.onRePasswordChange(event.currentTarget.value);
 	}
 	
 	render() {

@@ -1,18 +1,25 @@
+const cel = React.createElement;
+
 class restoreForm extends React.Component {
 	constructor() {
 		super();
-		this.state = {email: '', password: ''};
-		this.handleEmailChange = this.handleEmailChange.bind(this);
+		this.state = {code: '', password: '', repassword: ''};
+		this.handleCodeChange = this.handleCodeChange.bind(this);
 		this.handlePswdChange = this.handlePswdChange.bind(this);
+		this.handleRePswdChange = this.handlePswdChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	
-	handleEmailChange(e) {
-		this.setState({email: e.target.value});
+	handleCodeChange(e) {
+		
 	}
 	
 	handlePswdChange(e) {
-		this.setState({password: e.target.value});
+		this.setState({password: e.currentTarget.value});
+	}
+	
+	handleRePswdChange(e) {
+		this.setState({password: e.currentTarget.value});
 	}
 	
 	handleSubmit(e) {
@@ -21,16 +28,16 @@ class restoreForm extends React.Component {
 	}
 	
 	render() {
-		return cel('form', {onSubmit: this.handleSubmit}, [
-			cel('input', {name: 'email', type: 'email', onChange: this.handleEmailChange, placeholder: 'Email', required: true}, null),
-			cel('input', {name: 'password', type: 'password', onChange: this.handlePswdChange, placeholder: 'Password', required: true}, null),
-			cel('input', {type: 'submit', value: 'Login'}, null),
-			cel('a', {onClick: this.handleForgotPswd, href: '#', style: {marginLeft: '5px'}}, 'Forgot my password')
+		return cel('form', {key: 'res-form', onSubmit: this.handleSubmit}, [
+			cel('input', {type: 'text', onChange: this.handleCodeChange, placeholder: 'Code', required: true}, null),
+			cel('input', {type: 'password', onChange: this.handlePswdChange, placeholder: 'New password', required: true}, null),
+			cel('input', {type: 'password', onChange: this.handleRePswdChange, placeholder: 'Retype new password', required: true}, null),
+			cel('input', {type: 'submit', value: 'Submit'}, null),
 		]);
 	}
 }
 
 ReactDOM.render(
-	cel(LoginForm, null, null),
-	document.getElementsByClassName('reg-form')[0]
+	cel(restoreForm, null, null),
+	document.getElementsByClassName('res-form')[0]
 );

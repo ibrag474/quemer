@@ -24,11 +24,11 @@ class LoginForm extends React.Component {
 	}
 	
 	handleEmailChange(e) {
-		this.setState({email: e.target.value});
+		this.setState({email: e.currentTarget.value});
 	}
 	
 	handlePswdChange(e) {
-		this.setState({password: e.target.value});
+		this.setState({password: e.currentTarget.value});
 	}
 	
 	handleSubmit(e) {
