@@ -21,15 +21,12 @@
 	xmlhttp.send(); 
 }*/
 
-function submitLogin(formData, callback) {
+function submitLogin(context, formData, callback) {
 	let headers = { name: ['Authorization'], body: [btoa(unescape(encodeURIComponent(formData.email + ':' + formData.password)))]};
 	ajax('POST', 'v1/auth/login', null, headers, function(status, result) {
-		if (status == 200) {
-			if (result.jwt != null) {
-				document.cookie = "jwt="+ result.jwt +"; path=/; sameSite=strict;"; //prideti secure;
-				callback(true);
-			} else callback(false);
-		} else callback(false);
+		if (status == 200 &&result.jwt != null)
+			document.cookie = "jwt="+ result.jwt +"; path=/; sameSite=strict;";
+		callback(context, status, result);	
 	});
 }
 
@@ -52,48 +49,38 @@ function checkpswdmatch() {
 	}
 }
 
-function submitSignOn(formData) {
-		var data = { "email":formData.email, "password":formData.password, "name":formData.name };
-		var jsondata = JSON.stringify(data);
+function submitSignOn(context, formData, callback) {
+	var data = { "email":formData.email, "password":formData.password, "name":formData.name, surname: formData.surname };
+	var jsondata = JSON.stringify(data);
 		
-		xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4) {
 			var response = this.responseText;
 			var myObj = JSON.parse(response);
-			if (myObj["action"] == 'redirect') {
-				location.replace(myObj["message"]);
-			}
-			else if (myObj["action"] == 'message') {
-				document.getElementById("res").innerHTML = myObj["message"];
-				document.getElementById("submit").disabled = true;
-				document.getElementById("submit").style = "background:#a0a0a0; color: #666666; transition: 0.5s";
-			}
-			//console.log(myObj["url"]);
+			callback(context, this.status, myObj);
 		}
 	}
-	xmlhttp.open("POST", "register/?param=" + jsondata, true);
+	xmlhttp.open("POST", "/api/v1/auth/register/?json=" + jsondata, true);
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send(); 
 }
 
-function forgotPswd() {
-	var email = document.forms["loginForm"]["email"].value;
-	if (email.length > 0) {
-		var data = { "act":"pswdresetcode", "email":email };
-		var jsondata = JSON.stringify(data);
+function forgotPswd(context, email, callback) {
+	var data = { "email":email };
+	var jsondata = JSON.stringify(data);
 
-		xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				//var response = this.responseText;
-				location.replace('/account/restore');	
-			}
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			const response = this.responseText;
+			const myObj = JSON.parse(response);
+			callback(context, this.status, myObj);
 		}
-		xmlhttp.open("POST", "restore/?param=" + jsondata, true);
-		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		xmlhttp.send();
 	}
+	xmlhttp.open("POST", "/api/v1/auth/restore/?json=" + jsondata, true);
+	xmlhttp.setRequestHeader("Content-type", "application/json");
+	xmlhttp.send();
 }
 
 function submitPswdReset(context, code, pswd, repswd, callback) {
@@ -111,13 +98,27 @@ function submitPswdReset(context, code, pswd, repswd, callback) {
 			callback(context, this.status, myObj);		
 		}
 	}
-	xmlhttp.open("PUT", "api/v1/auth/restore/?json=" + jsondata, true);
+	xmlhttp.open("PUT", "/api/v1/auth/restore/?json=" + jsondata, true);
 	xmlhttp.setRequestHeader("Content-type", "application/json");
 	xmlhttp.send();
-
 }
 
+function submitResendActCode(context, email, callback) {
+	var data = { "email":email };
+	var jsondata = JSON.stringify(data);
 
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			const response = this.responseText;
+			const myObj = JSON.parse(response);
+			callback(context, this.status, myObj);
+		}
+	}
+	xmlhttp.open("POST", "/api/v1/auth/activation/?json=" + jsondata, true);
+	xmlhttp.setRequestHeader("Content-type", "application/json");
+	xmlhttp.send();
+}
 
 
 

@@ -10,7 +10,7 @@ class Auth extends Model {
 	//GET
 	public function getUser($params) {
 		if (!empty($params["email"])) {
-			$result = $this->db->row('SELECT id, name, password, salt, email, activated FROM users WHERE email = :email', $params);
+			$result = $this->db->row('SELECT id, name, surname, password, salt, email, activated FROM users WHERE email = :email', $params);
 			return $result;
 		}
 	}
@@ -30,13 +30,14 @@ class Auth extends Model {
 				$hashedpswd = hash("sha256", $obj['password'] . $salt, false);
 				$data = [
 					"name" => $obj["name"],
+					"surname" => $obj["surname"],
 					"password" => $hashedpswd,
 					"email" => $obj["email"],
 					"salt" => $salt
 				];
 				$activationKey = hash('sha256', $data['email'] . time());
 				$data['activated'] = 0;
-				$this->db->row('INSERT INTO users (name, password, salt, email, activated) VALUES (:name, :password, :salt, :email, :activated)', $data);
+				$this->db->row('INSERT INTO users (name, surname, password, salt, email, activated) VALUES (:name, :surname, :password, :salt, :email, :activated)', $data);
 				$userID = $this->db->lastInsertId();
 				$params = [
 					'userID' => $userID,

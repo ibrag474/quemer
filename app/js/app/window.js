@@ -208,10 +208,8 @@ class EditForm extends React.Component {
 		if (this.state.note.content.length != 0 || this.state.note.content.length != 0) {
 			e.currentTarget[1].style.borderColor = '#ededed';
 			this.props.onSubmitClick(this.state.note);
-			console.log('1');
 		}
 		else e.currentTarget[1].style.borderColor = 'red';
-		console.log('2');
 		e.preventDefault();
 	}
 

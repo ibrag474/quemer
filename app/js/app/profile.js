@@ -4,9 +4,18 @@ class Profile extends React.Component {
 	constructor() {
 		super();
 		this.state = {profile: ''};
+		this.reload = this.reload.bind(this);
 	}
 	
 	componentDidMount() {
+		loadMe(this, (context, status, result) => {
+			if (status == 200) {
+				context.setState({profile: result});
+			}
+		});
+	}
+	
+	reload() {
 		loadMe(this, (context, status, result) => {
 			if (status == 200) {
 				context.setState({profile: result});
@@ -22,11 +31,12 @@ class Profile extends React.Component {
 				cel('img', {key: 'circularIMG', className: 'circularIMG', src: '/app/views/design/icons/defaultAvatar.png', del: 'default profile picture'}, null),
 				cel('div', {key: 'profile-name', className: 'profile-name'}, cel('div', {key: 'row', className: 'row'}, [
 					cel('div', {key: 'name-col', className: 'col'}, cel('p', {key: 'name-p'}, profile.name)),
-					cel('div', {key: 'surname-col', className: 'col'}, cel('p', {key: 'surname-p'}, 'No surname'))
+					cel('div', {key: 'surname-col', className: 'col'}, cel('p', {key: 'surname-p'}, profile.surname))
 				])),
 			]),
 			cel('div', {key: 'changepswd-div', className: 'profile-data'}, cel(ChangePasswdForm, null, null)),
-			cel('div', {key: 'accInfo-div', className: 'profile-data'}, cel(AccInfo, {profile: profile}, null))
+			cel('div', {key: 'accInfo-div', className: 'profile-data'}, cel(AccInfo, {profile: profile}, null)),
+			cel('div', {key: 'editaccInfo-div', className: 'profile-data'}, cel(ChangeDetails, {profile: profile, refresh: this.reload}, null))
 		];	
 	}
 }
@@ -107,6 +117,49 @@ function checkPswd(pswd, repswd) {
 	return data;
 }
 
+class ChangeDetails extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {profile: this.props.profile, details: {surname: ''}};
+		this.handleSurnameChange = this.handleSurnameChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	
+	componentDidUpdate() {
+		if (this.props.profile != this.state.profile) {
+			this.setState({profile: this.props.profile});
+		}
+	}
+	
+	handleSurnameChange(e) {
+		const surname = e.currentTarget.value;
+		let details = this.state.details;
+		details.surname = surname;
+		this.setState({details: details});
+	}
+	
+	handleSubmit(e) {
+		changeAccDetails(this, this.state.details, (context, status, result) => {
+			if (status == 200) {
+				this.props.refresh();
+				alert(result.message);
+			} else alert(result.message + ' ' + result.exception);
+		});
+		e.preventDefault();
+	}
+	
+	render() {
+		const profile = this.state.profile;
+		const accStatus = profile.activated == 1 ? 'Activated' : 'Not activated';
+		return cel('form', {key: 'changeDetailsForm', className: 'editAccForm', onSubmit: this.handleSubmit}, [
+			cel('h4', {key: 'label'}, 'Change account details'),
+			cel('input', {type: 'text', placeholder: 'Surname', title: 'Surname', key: 'surnameInp', onChange: this.handleSurnameChange, defaultValue: this.state.profile.surname}, null),
+			cel('input', {key: 'changeDetails-button', type: 'submit', value: 'Change'}, null),
+		]);
+			
+	}
+}
+
 class AccInfo extends React.Component {
 	constructor(props) {
 		super(props);
@@ -124,7 +177,8 @@ class AccInfo extends React.Component {
 		const accStatus = profile.activated == 1 ? 'Activated' : 'Not activated';
 		return [
 			cel('h4', {key: 'label'}, 'Account details'),
-			cel('p', {key: 'username-p'}, 'Username: ' + profile.name),
+			cel('p', {key: 'username-p'}, 'Name: ' + profile.name),
+			cel('p', {key: 'surname-p'}, 'Surname: ' + profile.surname),
 			cel('p', {key: 'email-p'}, 'Email: ' + profile.email),
 			cel('p', {key: 'status-p'}, 'Account status: ' + accStatus),
 		];

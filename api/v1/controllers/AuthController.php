@@ -25,16 +25,24 @@ class AuthController extends Controller {
 		$user = $this->model->getUser(array('email' => $json['email']));
 		if (!empty($user)) {
 			$hashedpswd = hash("sha256", $json['password'] . $user[0]['salt'], false);
-			if ($hashedpswd === $user[0]['password'] && $user[0]['activated'] == 1) {
-				$user = array_pop($user);
-				$jwt = $this->genJwt($user);
-				$this->error(200, array(
-					"message" => "Successful login.",
-					"jwt" => $jwt
-				));
+			if ($hashedpswd === $user[0]['password']) {
+				if ($user[0]['activated'] == 1) {
+					$user = array_pop($user);
+					$jwt = $this->genJwt($user);
+					$this->error(200, array(
+						"message" => "Successful login.",
+						"jwt" => $jwt
+					));
+				} else {
+					$this->error(422, array(
+						"message" => "Authentication failed.",
+						"exception" => "Account is not activated"
+					));
+				}
 			} else {
 				$this->error(401, array(
-					"message" => "Authentication failed."
+					"message" => "Authentication failed.",
+					"exception" => "Password is incorrect."
 				));
 			}
 		} else {
@@ -46,7 +54,7 @@ class AuthController extends Controller {
 	
 	public function sendRegister() {
 		$json = $this->getJSON();
-		if (array_key_exists("email", $json) && array_key_exists("name", $json) && array_key_exists("password", $json)) {
+		if (array_key_exists("email", $json) && array_key_exists("name", $json) && array_key_exists("surname", $json)  && array_key_exists("password", $json)) {
 			try {
 				$this->model->registerUser($json);
 				$this->sendJSON(array("message" => "User is succesfully registered."));
@@ -76,6 +84,10 @@ class AuthController extends Controller {
 					"exception" => $e->getMessage()
 				));
 			}
+		} else {
+			$this->error(400, array(
+				"message" => "Required parameters are not provided."
+			));
 		}
 	}
 	
@@ -92,6 +104,10 @@ class AuthController extends Controller {
 					"exception" => $e->getMessage()
 				));
 			}
+		} else {
+			$this->error(400, array(
+				"message" => "Required parameters are not provided."
+			));
 		}
 	}
 	
@@ -130,6 +146,10 @@ class AuthController extends Controller {
 					"exception" => $e->getMessage()
 				));
 			}
+		} else {
+			$this->error(400, array(
+				"message" => "Required parameters are not provided."
+			));
 		}
 	}
 	

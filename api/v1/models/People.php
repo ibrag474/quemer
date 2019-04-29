@@ -43,7 +43,7 @@ class People extends Model {
 	}
 	
 	public function search($obj) {
-		$results = $this->db->row('SELECT id, name FROM users WHERE name = :name', array("name" => $obj["name"]));
+		$results = $this->db->row('SELECT id, name, surname FROM users WHERE name = :name', array("name" => $obj["name"]));
 		for ($i = 0; $i < count($results); $i++) {
 			$id = $results[$i]["id"];
 			$status = $this->db->row('SELECT areFriends FROM peoplerelation WHERE (userid1 = :id AND userid2 = :myid) OR (userid1 = :myid AND userid2 = :id)', array("id" => $id, "myid" => $obj["userid"]));

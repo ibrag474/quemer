@@ -24,23 +24,6 @@ function checkPswd(pswd, repswd) {
 	return data;
 }
 
-function submit(e) {
-	const data = {
-		email: e.currentTarget.email.value,
-		name: e.currentTarget.name.value,
-		surname: e.currentTarget.surname.value,
-		password: e.currentTarget.password.value,
-		rePassword: e.currentTarget.rePassword.value
-	};
-	
-	if (data.rePassword === data.password && data.password.length >= 8) {
-		data.name = data.name.capitalize();
-		data.surname = data.surname.capitalize();
-		submitSignOn(data);
-	}
-	
-}
-
 class PasswordInput extends React.Component {
 	constructor(props) {
 		super(props);
@@ -72,7 +55,7 @@ class PasswordInput extends React.Component {
 class RegisterForm extends React.Component {
 	constructor() {
 		super();
-		this.state = {password: '', rePassword: ''};
+		this.state = {password: '', rePassword: '', message: '', btnStatus: false};
 		this.handlePswdChange = this.handlePswdChange.bind(this);
 		this.handleRePswdChange = this.handleRePswdChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -86,18 +69,37 @@ class RegisterForm extends React.Component {
 		this.setState({rePassword: repswd});
 	}
 	
-	handleSubmit(event) {
-		submit(event);
-		event.preventDefault();
+	handleSubmit(e) {
+		const data = {
+			email: e.currentTarget.email.value,
+			name: e.currentTarget.name.value,
+			surname: e.currentTarget.surname.value,
+			password: e.currentTarget.password.value,
+			rePassword: e.currentTarget.rePassword.value
+		};
+	
+		if (data.rePassword === data.password && data.password.length >= 8) {
+			data.name = data.name.capitalize();
+			data.surname = data.surname.capitalize();
+			submitSignOn(this, data, (context, status, result) => {
+				if (status == 200) {
+					context.setState({btnStatus: true, message: cel('a', {href: '/account/login', key: 'LoginBtn'}, 'Account is registered succesfully. Activation link sent to your email. Click here to login')});
+					document.getElementById("submit").style = "background:#a0a0a0; color: #666666; transition: 0.5s";
+				} else context.setState({message: result.message + ' ' + result.message});
+			});
+		}
+		e.preventDefault();
 	}
 	
 	render() {
+		const btnStat = this.state.btnStatus;
 		return cel('form', {onSubmit: this.handleSubmit}, [
+			cel('p', {key: 'messages', id: 'res'}, this.state.message),
 			cel('input', {name: 'email', type: 'email', placeholder: 'Email', required: true}, null),
 			cel('input', {name: 'name', type: 'text', placeholder: 'Name', required: true}, null),
 			cel('input', {name: 'surname', type: 'text', placeholder: 'Surname', required: true}, null),
 			cel(PasswordInput, {pswd: this.state.password, repswd: this.state.rePassword, onPasswordChange: this.handlePswdChange, onRePasswordChange: this.handleRePswdChange}, null),
-			cel('input', {id: 'submit', type: 'submit', value: 'Register'}, null),
+			cel('input', {id: 'submit', type: 'submit', disabled: btnStat, value: 'Register'}, null),
 			cel('h5', null, ['By creating an account you agree to our ',
 				cel('a', {href: '/app/views/legal/qtou.pdf'}, 'Terms Of Use'), ' and ',
 				cel('a', {href: '/app/views/legal/qpp.pdf'}, 'Privacy Policy')

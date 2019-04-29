@@ -1,7 +1,6 @@
 <div class="main-card">
 	<div class="form-div">
 		<h3>Log In</h3>
-		<p id="res"></p>
 		<div class="reg-form"></div>
 		<!--<form action="/" name="loginForm" onsubmit="submitLogin(); return false;">
 			<input name="email" type="email" placeholder="Email" required>

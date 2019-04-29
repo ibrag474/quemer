@@ -72,7 +72,7 @@ class MyAccountTab extends React.Component {
 					cel('div', {key: 'myAcountTab-col5',className: 'col-5'}, 
 						cel('img', {key: 'circularIMG', className: 'circularIMG', src: '/app/views/design/icons/defaultAvatar.png', del: 'default profile picture'}, null)),
 					cel('div', {key: 'myAcountTab-col7', className: 'col-7'}, [
-						cel('p', {key: 'myname',}, this.state.me.name),
+						cel('p', {key: 'myname',}, this.state.me.name + ' ' + this.state.me.surname),
 						cel('a', {key: 'more-btn', href: '/app/profile'}, 'More'), cel('br', {key: 'br',}, null),
 						cel('a', {key: 'logout-btn', href: '#', onClick: this.handleLogOut}, 'Log out'),
 					]),

@@ -5,3 +5,11 @@ function changePassword(context, password, callback) {
 		callback(context, status, result);
 	});
 }
+
+function changeAccDetails(context, details, callback) {
+	let headers = { name: [], body: [] };
+	let data = {"surname": details.surname};
+	ajax('PUT', 'v1/users/details', data, headers, function(status, result) {
+		callback(context, status, result);
+	});
+}
