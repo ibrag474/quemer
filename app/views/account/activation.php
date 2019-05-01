@@ -1,0 +1,1 @@
+<script src="/app/js/account/activation.js"></script>

@@ -31,9 +31,9 @@ return [
 		'action' => 'restore',
 	],
 	
-	'account/activate' => [
+	'account/activation' => [
 		'controller' => 'account',
-		'action' => 'activate',
+		'action' => 'activation',
 	],
 	
 	'account/logout' => [

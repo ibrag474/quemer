@@ -154,7 +154,6 @@ class AuthController extends Controller {
 	}
 	
 	public function editActivation() {
-		//resend activation code
 		$json = $this->getJSON();
 		if (array_key_exists("hash", $json)) {
 			try {

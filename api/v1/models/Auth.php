@@ -131,11 +131,13 @@ class Auth extends Model {
 	}
 	
 	public function activateAccount($obj) {
-		$DBUserCode = $this->db->row('SELECT userID, code, date, type FROM emailActCodes WHERE code = :code', array('code' => $obj['hash']));
-		if (array_key_exists('code', $DBUserCode[0]) && $DBUserCode[0]['code'] == $obj['hash']) {
-			if ($this->db->query('UPDATE users SET activated = :status WHERE id = :id', array('status' => true, 'id' => $DBUserCode[0]['userID']))) {
-				$this->db->row('DELETE FROM emailActCodes WHERE userID = :userid AND type = 0', array('userid' => $DBUserCode[0]['userID']));
-			}
+		$DBUserCode = $this->db->row('SELECT userID, code, date FROM emailActCodes WHERE code = :code AND type = 0', array('code' => $obj['hash']));
+		if (!empty($DBUserCode)) {
+			if (array_key_exists('code', $DBUserCode[0]) && $DBUserCode[0]['code'] === $obj['hash']) {
+				if ($this->db->query('UPDATE users SET activated = :status WHERE id = :id', array('status' => true, 'id' => $DBUserCode[0]['userID']))) {
+					$this->db->row('DELETE FROM emailActCodes WHERE userID = :userid AND type = 0', array('userid' => $DBUserCode[0]['userID']));
+				}
+			} else throw new \InvalidArgumentException("Invalid account activation hash.");
 		} else throw new \InvalidArgumentException("Invalid account activation hash.");
 	}
 }

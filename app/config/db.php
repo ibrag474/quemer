@@ -1,8 +1,8 @@
 <?php
 return [
 	'host' => 'localhost',
-	'name' => 'website',
-	'user' => 'website',
-	'password' => 'n6xt4evxDPRXujm0',
+	'name' => 'quemer',
+	'user' => 'quem',
+	'password' => 'LJ9XEtmPLgtZBF7o',
 ];
 ?>

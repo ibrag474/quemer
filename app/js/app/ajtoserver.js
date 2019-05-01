@@ -146,6 +146,18 @@ function editGroupTask(note, callback) {
 	});
 }
 
+function editGroupNote(note, callback) {
+	let headers = { name: [], body: [] };
+	let data = {'title': note.title, 'content': note.content, 'individ': note.individ, 'groupid': note.groupId};
+	ajax('PUT', 'v1/notes/note', data, headers, function(status, result) {
+		if (status == 200) {
+			if (result != null) {
+				callback(status);
+			} else callback(status);
+		} else callback(status);
+	});
+}
+
 function shareRecord(context, recID, groupName, callback) {
 	let headers = { name: [], body: [] };
 	let data = {'groupName': groupName, 'recID': recID};

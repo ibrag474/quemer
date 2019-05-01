@@ -57,7 +57,8 @@ class LoginForm extends React.Component {
 				} else if (status == 422) {
 					context.setState({message: cel('a', {key:'resendactcodeA', href:'#', onClick: this.resendActCode}, result.message + ' ' + result.exception + '. Click to here to resend activation code to your email address.')});
 				} else {
-					document.getElementById('res').innerHTML = result.message + result.exception;
+					//document.getElementById('res').innerHTML = result.message + result.exception;
+					context.setState({message: result.message + " " + result.exception});
 				}
 			});
 		}

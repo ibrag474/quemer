@@ -103,6 +103,22 @@ function submitPswdReset(context, code, pswd, repswd, callback) {
 	xmlhttp.send();
 }
 
+function submitActivationCode(code, callback) {
+	const data = { "hash":code };
+	var jsondata = JSON.stringify(data);
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			const response = this.responseText;
+			const myObj = JSON.parse(response);
+			callback(this.status, myObj);
+		}
+	}
+	xmlhttp.open("PUT", "/api/v1/auth/activation/?json=" + jsondata, true);
+	xmlhttp.setRequestHeader("Content-type", "application/json");
+	xmlhttp.send();
+}
+
 function submitResendActCode(context, email, callback) {
 	var data = { "email":email };
 	var jsondata = JSON.stringify(data);
