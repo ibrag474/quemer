@@ -3,6 +3,7 @@
 namespace models;
 
 use core\Model;
+use libs\notificator\Notificator;
 
 class People extends Model {
 	
@@ -60,11 +61,14 @@ class People extends Model {
 	public function invite($obj) {
 		$results = $this->db->row('SELECT id, areFriends, userid1, userid2 FROM peoplerelation WHERE userid1 = :userid AND userid2 = :id',
 								  array("userid" => $obj["userid"],"id" => $obj["id"]));
-		if ($results == null) {
+		if (empty($results)) {
 			if ($obj['id'] !== $obj["userid"]) {
 				if ($this->db->column('SELECT count(id) FROM users WHERE id = :id', array("id" => $obj["id"])) > 0) {
 					$values = ['areFriends' => 0, 'userid1' => $obj["userid"], 'userid2' => $obj['id'], 'date' => date('Y-m-d H:i:s')];
 					$this->db->query('INSERT INTO peoplerelation (areFriends, userid1, userid2, date) VALUES (:areFriends, :userid1, :userid2, :date)', $values);
+					$notif = new Notificator;
+					$query = $notif->createNotification("people.invite", $obj["userid"], $obj["id"]);
+					$this->db->query($query[0], $query[1]);
 				} else {
 					throw new \InvalidArgumentException('User does not exist.');
 				}

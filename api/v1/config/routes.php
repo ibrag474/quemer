@@ -5,7 +5,8 @@ return [
 	'people' => 'People',
 	'groups' => 'Groups',
 	'auth' => 'Auth',
-	'users' => 'Users'
+	'users' => 'Users',
+	'notifications' => 'Notifications',
 	
 ];
 ?>
