@@ -2,6 +2,14 @@
 <html>
 <head>
 	<title><?php echo $title; ?></title>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-130099814-1"></script>
+	<script>
+ 		 window.dataLayer = window.dataLayer || [];
+  		function gtag(){dataLayer.push(arguments);}
+  		gtag('js', new Date());
+
+  		gtag('config', 'UA-130099814-1');
+	</script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#32d8ca">

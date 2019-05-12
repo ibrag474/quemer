@@ -2,6 +2,14 @@
 <html>
 <head>
 	<title><?php echo $title; ?></title>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-130099814-1"></script>
+	<script>
+ 		 window.dataLayer = window.dataLayer || [];
+  		function gtag(){dataLayer.push(arguments);}
+  		gtag('js', new Date());
+
+  		gtag('config', 'UA-130099814-1');
+	</script>
 	<meta charset="UTF-8">
 	<meta name="description=" content="Quemer.com is the web app that allows you to easily create group tasks and notes for free. It is an early access app, so there will be more features in the future.">
 	<meta name="google-site-verification" content="Br1k-rAMvH2gSwAo1SZ5B8P4E1JADyHuQM6K-PR9la8" />
