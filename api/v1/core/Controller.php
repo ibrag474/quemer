@@ -43,6 +43,7 @@ abstract class Controller {
 	
 	public function sendJSON($array) {
 		header('Content-type: application/json; charset=utf-8');
+		//refresh jwt
 		if ($this->renewJwt != null) {
 			$data = array(
 				"id" => $this->renewJwt->data->id,

@@ -19,35 +19,43 @@ class AuthController extends Controller {
 	//POST
 	public function sendLogin() {
 		$headers = getallheaders();
-		$json['authorization'] = explode(':', base64_decode($headers['Authorization']));
-		$json['email'] = $json['authorization'][0];
-		$json['password'] = $json['authorization'][1];
-		$user = $this->model->getUser(array('email' => $json['email']));
-		if (!empty($user)) {
-			$hashedpswd = hash("sha256", $json['password'] . $user[0]['salt'], false);
-			if ($hashedpswd === $user[0]['password']) {
-				if ($user[0]['activated'] == 1) {
-					$user = array_pop($user);
-					$jwt = $this->genJwt($user);
-					$this->error(200, array(
-						"message" => "Successful login.",
-						"jwt" => $jwt
-					));
+		if (!empty($headers['Authorization'])) {
+			$json['authorization'] = explode(':', base64_decode($headers['Authorization']));
+			$json['email'] = $json['authorization'][0];
+			$json['password'] = $json['authorization'][1];
+			$user = $this->model->getUser(array('email' => $json['email']));
+			if (!empty($user)) {
+				$hashedpswd = hash("sha256", $json['password'] . $user[0]['salt'], false);
+				if ($hashedpswd === $user[0]['password']) {
+					if ($user[0]['activated'] == 1) {
+						$user = array_pop($user);
+						$to_jwt = array("id" => $user['id'], "name" => $user['name'], "email" => $user['email']);
+						$jwt = $this->genJwt($to_jwt);
+						$this->error(200, array(
+							"message" => "Successful login.",
+							"jwt" => $jwt
+						));
+					} else {
+						$this->error(422, array(
+							"message" => "Authentication failed.",
+							"exception" => "Account is not activated"
+						));
+					}
 				} else {
-					$this->error(422, array(
+					$this->error(401, array(
 						"message" => "Authentication failed.",
-						"exception" => "Account is not activated"
+						"exception" => "Password is incorrect."
 					));
 				}
 			} else {
-				$this->error(401, array(
-					"message" => "Authentication failed.",
-					"exception" => "Password is incorrect."
+				$this->error(404, array(
+					"message" => "Authentication failed."
 				));
 			}
 		} else {
 			$this->error(404, array(
-				"message" => "Authentication failed."
+				"message" => "Authentication failed.",
+				"exception" => "Empty authorization header."
 			));
 		}
 	}
