@@ -22,7 +22,7 @@
 }*/
 
 function submitLogin(context, formData, callback) {
-	let headers = { name: ['Authorization'], body: [btoa(unescape(encodeURIComponent(formData.email + ':' + formData.password)))]};
+	let headers = { name: ['Authorization'], body: [btoa(unescape(encodeURIComponent(formData.email + ':' + formData.password + ':' + false)))]};
 	ajax('POST', 'v1/auth/login', null, headers, function(status, result) {
 		if (status == 200 &&result.jwt != null)
 			document.cookie = "jwt="+ result.jwt +"; path=/; sameSite=strict;";

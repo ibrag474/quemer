@@ -44,11 +44,12 @@ abstract class Controller {
 	public function sendJSON($array) {
 		header('Content-type: application/json; charset=utf-8');
 		//refresh jwt
-		if ($this->renewJwt != null) {
+		if ($this->renewJwt != null && $this->renewJwt->data->authType != true) {
 			$data = array(
 				"id" => $this->renewJwt->data->id,
 				"name" => $this->renewJwt->data->name,
-				"email" => $this->renewJwt->data->email
+				"email" => $this->renewJwt->data->email,
+				"authType" => $user->renewJwt->data->authType
 			);
 			$jwt = $this->genJwt($data);
 			header('Authorization: ' . $jwt);
@@ -90,12 +91,16 @@ abstract class Controller {
 	public function genJwt($data) {
 		$user = $data;
 		include 'config/jwt.php';
+		$to_exp;
+		if ($user['authType'] == false) $to_exp = $exp;
+		else $to_exp = $longexp;
 		$token = array(
-			"exp" => $exp,
+			"exp" => $to_exp,
 			"data" => array(
 				"id" => $user['id'],
 				"name" => $user['name'],
-				"email" => $user['email']
+				"email" => $user['email'],
+				"authType" => $user["authType"]
 			)
 		);
 		// generate jwt

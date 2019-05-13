@@ -21,15 +21,18 @@ class AuthController extends Controller {
 		$headers = getallheaders();
 		if (!empty($headers['Authorization'])) {
 			$json['authorization'] = explode(':', base64_decode($headers['Authorization']));
-			$json['email'] = $json['authorization'][0];
-			$json['password'] = $json['authorization'][1];
+			if (count($json['authorization']) == 3) {
+				$json['email'] = $json['authorization'][0];
+				$json['password'] = $json['authorization'][1];
+				$json['authType'] = $json['authorization'][2];
+			} else exit();
 			$user = $this->model->getUser(array('email' => $json['email']));
 			if (!empty($user)) {
 				$hashedpswd = hash("sha256", $json['password'] . $user[0]['salt'], false);
 				if ($hashedpswd === $user[0]['password']) {
 					if ($user[0]['activated'] == 1) {
 						$user = array_pop($user);
-						$to_jwt = array("id" => $user['id'], "name" => $user['name'], "email" => $user['email']);
+						$to_jwt = array("id" => $user['id'], "name" => $user['name'], "email" => $user['email'], "authType" => $json['authType']);
 						$jwt = $this->genJwt($to_jwt);
 						$this->error(200, array(
 							"message" => "Successful login.",
