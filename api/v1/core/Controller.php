@@ -92,6 +92,7 @@ abstract class Controller {
 		$user = $data;
 		include 'config/jwt.php';
 		$to_exp;
+		$user['authType'] = ($user['authType'] === "true");
 		if ($user['authType'] == false) $to_exp = $exp;
 		else $to_exp = $longexp;
 		$token = array(
